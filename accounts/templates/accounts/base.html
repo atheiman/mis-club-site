@@ -1,0 +1,10 @@
+{% extends 'global/layout.html' %}
+{% load staticfiles %}
+
+{% block app_stylesheets %}
+<link href="{% static 'accounts/style.css' %}" rel="stylesheet">
+{% endblock app_stylesheets %}
+
+{% block app_scripts %}
+<script src="{% static 'accounts/script.js' %}"></script>
+{% endblock app_scripts %}
