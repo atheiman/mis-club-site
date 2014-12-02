@@ -1,26 +1,14 @@
 from django.conf.urls import patterns, url
 
-from attendance import views
+from .views import index, meeting_list, signin
 
 urlpatterns = patterns('',
     # /
-    url(
-        r'^$',
-        views.index,
-        name='index',
-    ),
+    url(r'^$', index, name='index'),
 
-    # # /obj_id/
-    # url(
-    #     r'^(?P<obj_id>[0-9]+)\/?$',
-    #     views.obj_id,
-    #     name='obj_id',
-    # ),
+    # /meetings
+    url(r'^meetings\/?$', meeting_list, name='meeting_list'),
 
-    # # /category_slug/
-    # url(
-    #     r'^(?P<category_slug>[a-z0-9_-]+)\/?$',
-    #     views.obj_id,
-    #     name='obj_id',
-    # ),
+    # /signin/<meeting_id>
+    url(r'signin/(?P<meeting_id>\d+)', signin, name='signin'),
 )

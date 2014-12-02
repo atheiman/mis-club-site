@@ -1,30 +1,42 @@
 from django.contrib import admin
-# from django.utils import timezone
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
-# from .models import Post
-
-
-
-# def make_published(modeladmin, request, queryset):
-#     queryset.update(status=PUBLISHED)
-#     for q in queryset:
-#         q.published_date_time = timezone.now()
-#         q.save()
-# make_published.short_description = "Mark selected posts as %s" % PUBLISHED
+from .models import Member, Meeting
 
 
 
-# class PostAdmin(admin.ModelAdmin):
-#     fields = ['slug', 'created_by']
-#     list_display = ['slug', 'created_by', 'published_date_time']
-#     actions = [make_published]
-
-#     def save_model(self, request, obj, form, change):
-#         if not change:
-#             # object was created by the user submitting the form
-#             obj.created_by = request.user
-#         obj.save()
+# Inline admin descriptor for Member model
+class MemberInline(admin.StackedInline):
+    model = Member
+    can_delete = False
+    verbose_name_plural = 'member'
 
 
 
-# admin.site.register(Post, PostAdmin)
+# Define a new User admin
+class UserAdmin(UserAdmin):
+    inlines = (MemberInline, )
+
+
+
+class MeetingAdmin(admin.ModelAdmin):
+    fields = [
+        'title',
+        'date_time',
+        'bonus',
+        'description',
+    ]
+    list_display = [
+        'title',
+        'date_time',
+    ]
+    ordering = ['-date_time']
+
+
+
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+# Register MeetingAdmin
+admin.site.register(Meeting, MeetingAdmin)
