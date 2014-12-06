@@ -68,7 +68,7 @@ class Member(models.Model):
     ksu_identification_code = models.BigIntegerField()
 
     # There is no need to define a 'simple' many-to-many class in Django modeling.
-    meetings = models.ManyToManyField(Meeting, blank=True, null=True)
+    meetings = models.ManyToManyField(Meeting, blank=True, null=True, related_name='members')
 
     def is_upperclass(self):
         return self.year_in_school in (self.JUNIOR, self.SENIOR)

@@ -1,14 +1,14 @@
 from django.conf.urls import patterns, url
 
-from .views import index, meeting_list, signin
+from .views import index, register, signin
 
 urlpatterns = patterns('',
     # /
     url(r'^$', index, name='index'),
 
-    # /meetings
-    url(r'^meetings\/?$', meeting_list, name='meeting_list'),
+    # /register
+    url(r'^register\/?$', register, name='register'),
 
     # /signin/<meeting_id>
-    url(r'signin/(?P<meeting_id>\d+)', signin, name='signin'),
+    url(r'^signin/(?P<meeting_id>\d+)', signin, name='signin'),
 )
