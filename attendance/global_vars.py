@@ -1,16 +1,18 @@
-# Standing in school
-FRESHMAN = 'FR'
-SOPHOMORE = 'SO'
-JUNIOR = 'JR'
-SENIOR = 'SR'
+YEAR_IN_SCHOOL_CHOICES = (
+    ('FR', 'Freshman'),
+    ('SO', 'Sophomore'),
+    ('JR', 'Junior'),
+    ('SR', 'Senior'),
+)
 
-# Majors
-ACCOUNTING = 'ACCOUNTING'
-ENTREPRENEURSHIP = 'ENTREPRENEURSHIP'
-FINANCE = 'FINANCE'
-MARKETING = 'MARKETING'
-MANAGEMENT = 'MANAGEMENT'
-MANAGEMENT_INFORMATION_SYSTEMS = 'MANAGEMENT INFORMATION SYSTEMS'
-BUSINESS_UNDECIDED = 'BUSINESS UNDECIDED'
-BUSINESS_OTHER = 'BUSINESS OTHER'
-NON_BUSINESS = 'NON BUSINESS'
+MAJOR_CHOICES = (
+    ('MANAGEMENT INFORMATION SYSTEMS', 'Management Information Systems'),
+    ('ACCOUNTING', 'Accounting'),
+    ('ENTREPRENEURSHIP', 'Entrepeneurship'),
+    ('FINANCE', 'Finance'),
+    ('MARKETING', 'Marketing'),
+    ('MANAGEMENT', 'Management'),
+    ('BUSINESS UNDECIDED', 'Business - Undecided'),
+    ('BUSINESS OTHER', 'Business - Other'),
+    ('NON BUSINESS', 'Non-Business'),
+)

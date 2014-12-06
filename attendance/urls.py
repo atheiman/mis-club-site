@@ -1,11 +1,8 @@
 from django.conf.urls import patterns, url
 
-from .views import index, register, signin
+from .views import register, signin
 
 urlpatterns = patterns('',
-    # /
-    url(r'^$', index, name='index'),
-
     # /register
     url(r'^register\/?$', register, name='register'),
 

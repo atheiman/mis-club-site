@@ -2,44 +2,44 @@
 
 {% block content %}
 
-  <h1 class="text-center">Register</h1>
+    <script>
+    // If new_user in GET param 'new_user', display a success message.
+    function getSearchParameters() {
+        var prmstr = window.location.search.substr(1);
+        return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+    }
 
-  {% for error in form.non_field_errors %}
-    <div class='alert alert-danger'>{{ error }}</p>
-  {% endfor %}
+    function transformToAssocArray( prmstr ) {
+        var params = {};
+        var prmarr = prmstr.split("&");
+        for (var i = 0; i < prmarr.length; i++) {
+            var tmparr = prmarr[i].split("=");
+            params[tmparr[0]] = tmparr[1];
+        }
+        return params;
+    }
 
-  <form id='registerForm' class="text-center" method="post" action="{% url 'attendance:register' %}">
+    var params = getSearchParameters();
+    if (params.hasOwnProperty('new_user')){
+        document.write(
+            "<div class='alert alert-success'>Created new user <strong>" +
+            params.new_user + "</strong></div>"
+        )
+    }
+    </script>
 
-    {% csrf_token %}
+    <h1 class="text-center">Register for K-State MIS Club Meetings</h1>
 
-    <p>
-      {% for error in form.username.errors %}
-        <div class='alert alert-danger'>{{ error }}</p>
-      {% endfor %}
-      <label for='id_username'>Username:</label>
-      {{ form.username }}
-    </p>
+    <div class="text-center">
+        <form id='registerForm' method="post" action="{% url 'attendance:register' %}">
 
-    <p>
-      {% for error in form.password.errors %}
-        <div class='alert alert-danger'>{{ error }}</p>
-      {% endfor %}
-      <label for='id_password'>Password:</label>
-      {{ form.password }}
-    </p>
+            {% csrf_token %}
 
-    <p>
-      {% for error in form.confirm_password.errors %}
-        <div class='alert alert-danger'>{{ error }}</p>
-      {% endfor %}
-      <label for='id_confirm_password'>Confirm Password:</label>
-      {{ form.confirm_password }}
-    </p>
+            {% include "attendance/form.html" %}
 
-    <p>
-      <label/><input type="submit" value="Register">
-    </p>
+            <input type="submit"/>
 
-  </form>
+        </form>
+    </div>
 
 {% endblock content %}

@@ -20,6 +20,14 @@ class UserAdmin(UserAdmin):
 
 
 
+def make_available_for_sign_in(modeladmin, request, queryset):
+    queryset.update(available_for_sign_in=True)
+make_available_for_sign_in.short_description = "Mark selected meetings as available for sign in"
+
+def make_unavailable_for_sign_in(modeladmin, request, queryset):
+    queryset.update(available_for_sign_in=False)
+make_unavailable_for_sign_in.short_description = "Mark selected meetings as unavailable for sign in"
+
 class MeetingAdmin(admin.ModelAdmin):
     fields = [
         'title',
@@ -32,6 +40,7 @@ class MeetingAdmin(admin.ModelAdmin):
         'date_time',
     ]
     ordering = ['-date_time']
+    actions = [make_available_for_sign_in, make_unavailable_for_sign_in]
 
 
 

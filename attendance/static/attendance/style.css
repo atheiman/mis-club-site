@@ -1,1 +1,13 @@
 /* Attendance stylesheet */
+
+label {
+    min-width:150px;
+}
+div.form-field {
+    margin:15px 0;
+}
+#registerForm {
+    display:inline-block;
+    margin:0 auto;
+    text-align:left;
+}
