@@ -1,9 +1,9 @@
 from django import forms
-from django.contrib.auth.models import User
 
 from localflavor.us.forms import USPhoneNumberField
 
-from global_vars import YEAR_IN_SCHOOL_CHOICES, MAJOR_CHOICES
+from .global_vars import YEAR_IN_SCHOOL_CHOICES, MAJOR_CHOICES
+from .models import User, Member
 
 
 
@@ -48,6 +48,7 @@ class RegisterForm(forms.Form):
     ksu_identification_code = forms.IntegerField(
         max_value = 999999999999999999,
         min_value = 100000000000,
+        help_text = "Swipe your K-State ID Card. This is <strong>not</strong> your WID number.",
     )
 
     sign_in_to_active_meetings = forms.BooleanField(
@@ -61,5 +62,42 @@ class RegisterForm(forms.Form):
 
         if password != confirm_password:
             raise forms.ValidationError("Passwords don't match")
+
+        return self.cleaned_data
+
+
+
+class SigninForm(forms.Form):
+    ksu_identification_code = forms.IntegerField(
+        max_value = 999999999999999999,
+        min_value = 100000000000,
+        help_text = "Swipe your K-State ID Card. This is <strong>not</strong> your WID number.",
+    )
+    username = forms.RegexField(
+        label = 'K-State eID',
+        max_length = 30,
+        regex = r'^[a-z0-9-_]+$',
+    )
+    password = forms.CharField(
+        max_length = 30,
+        widget = forms.PasswordInput,
+        min_length = 6,
+    )
+
+    def clean(self):
+        if ksu_identification_code == "" and username == "":
+            raise forms.ValidationError("Either swipe ID card, or input username and password.")
+
+        if ksu_identification_code != "":
+            try:
+                member = Member.objects.get(ksu_identification_code=ksu_identification_code)
+            except Member.DoesNotExist:
+                raise forms.ValidationError("Invalid KSU Identification Code. Swipe again, or sign in with username and password.")
+
+        if username != "":
+            try:
+                member = Member.objects.get(username=username, password=password)
+            except Member.DoesNotExist:
+                raise forms.ValidationError("Invalid username and password.")
 
         return self.cleaned_data

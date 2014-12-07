@@ -1,0 +1,31 @@
+{% extends "attendance/base.html" %}
+
+{% block content %}
+
+    <h1 class="text-center">Signin to {{ meeting.title }} Meeting</h1>
+    <h2 class="text-center">{{ meeting.date_time|date }}</h2>
+
+    <div class="row">
+
+        <div class="text-center col-sm-6">
+
+            <p>Either swipe your K-State ID card, or input your registered eID and password.</p>
+
+            <form id='singinForm' method="post" action="{% url 'attendance:signin' meeting.id %}">
+
+                {% csrf_token %}
+
+                {% include "attendance/form.html" %}
+
+                <center><input type="submit" class="btn btn-primary"/></center>
+
+            </form>
+        </div>
+
+        <div class="text-center col-sm-6" style="margin-top:50px;">
+            <p>Not a registered user of the K-State MIS Club Attendance App yet?</p>
+            <a href="{% url 'attendance:register' %}" class="btn btn-primary">Register</a>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -28,18 +28,27 @@
     }
     </script>
 
-    <h1 class="text-center">Register for K-State MIS Club Meetings</h1>
+    <div class="row">
 
-    <div class="text-center">
-        <form id='registerForm' method="post" action="{% url 'attendance:register' %}">
+        <h1 class="text-center">Register for K-State MIS Club Meetings</h1>
 
-            {% csrf_token %}
+        <div class="text-center">
+            <form id='registerForm' method="post" action="{% url 'attendance:register' %}">
 
-            {% include "attendance/form.html" %}
+                {% csrf_token %}
 
-            <input type="submit"/>
+                {% include "attendance/form.html" %}
 
-        </form>
+                <center><input type="submit" class="btn btn-primary"/></center>
+
+            </form>
+        </div>
+
+        <div class="text-center" style="margin-top:50px;">
+            <p>Return to K-State MIS Club Attendance Application home.</p>
+            <a href="{% url 'attendance:index' %}" class="btn btn-primary">Home</a>
+        </div>
+
     </div>
 
 {% endblock content %}

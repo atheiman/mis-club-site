@@ -1,0 +1,22 @@
+{% extends "attendance/base.html" %}
+
+{% block content %}
+
+    <h1 class="text-center">K-State MIS Club Attendance App</h1>
+
+    <div class="text-center row">
+        <h4>Here are the meetings currently available for sign in:</h4>
+        {% for m in meetings %}
+            <div class="col-sm-2 col-md-3 col-lg-4"></div>
+            <section class="col-sm-8 col-md-6 col-lg-4 well">
+                <h2>{{ m.title }}</h2>
+                <h3>{{ m.date_time|date }} {{ m.date_time|time }}</h3>
+                <p>{{ m.description }}</p>
+                <a href="{% url 'attendance:signin' m.id %}" class="btn btn-primary">Sign in to this meeting</a>
+            </section>
+        {% empty %}
+            <div class="alert alert-warning">No meetings available for sign in right now.</div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

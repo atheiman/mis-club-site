@@ -20,6 +20,9 @@ class Meeting(models.Model):
 
     available_for_sign_in = models.BooleanField(default=False)
 
+    # many to many relationship with users
+    attendees = models.ManyToManyField(User, blank=True, null=True, related_name='meetings')
+
     def __unicode__(self):
         return self.title
 
@@ -50,9 +53,6 @@ class Member(models.Model):
         blank=True,
     )
     ksu_identification_code = models.BigIntegerField(unique=True)
-
-    # There is no need to define a 'simple' many-to-many class in Django modeling.
-    meetings = models.ManyToManyField(Meeting, blank=True, null=True, related_name='members')
 
     def is_upperclass(self):
         return self.year_in_school in (self.JUNIOR, self.SENIOR)

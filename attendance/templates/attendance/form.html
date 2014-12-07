@@ -11,7 +11,7 @@
         {{ field.label_tag }} {{ field }}
 
         {% if field.help_text %}
-            <br><span class="text-muted">{{ field.help_text }}</span>
+            <br><span class="text-muted">{{ field.help_text|safe }}</span>
         {% endif %}
     </div>
 {% endfor %}
