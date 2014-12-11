@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 
 from localflavor.us.forms import USPhoneNumberField
 
@@ -36,6 +37,7 @@ class RegisterForm(forms.Form):
     )
     phone = USPhoneNumberField(
         required = False,
+        help_text='xxx-xxx-xxxx',
     )
     year_in_school = forms.ChoiceField(
         choices = YEAR_IN_SCHOOL_CHOICES,
@@ -72,32 +74,40 @@ class SigninForm(forms.Form):
         max_value = 999999999999999999,
         min_value = 100000000000,
         help_text = "Swipe your K-State ID Card. This is <strong>not</strong> your WID number.",
+        required = False,
     )
     username = forms.RegexField(
         label = 'K-State eID',
         max_length = 30,
         regex = r'^[a-z0-9-_]+$',
+        required = False,
     )
     password = forms.CharField(
         max_length = 30,
         widget = forms.PasswordInput,
         min_length = 6,
+        required = False,
     )
 
     def clean(self):
+        print self.cleaned_data
+
+        ksu_identification_code = self.cleaned_data.get('ksu_identification_code')
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
         if ksu_identification_code == "" and username == "":
             raise forms.ValidationError("Either swipe ID card, or input username and password.")
 
-        if ksu_identification_code != "":
+        if ksu_identification_code is not None:
             try:
                 member = Member.objects.get(ksu_identification_code=ksu_identification_code)
             except Member.DoesNotExist:
                 raise forms.ValidationError("Invalid KSU Identification Code. Swipe again, or sign in with username and password.")
 
         if username != "":
-            try:
-                member = Member.objects.get(username=username, password=password)
-            except Member.DoesNotExist:
+            user = authenticate(username=username, password=password)
+            if user is None:
                 raise forms.ValidationError("Invalid username and password.")
 
         return self.cleaned_data

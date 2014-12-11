@@ -4,47 +4,37 @@
 
     <script>
     // If new_user in GET param 'new_user', display a success message.
-    function getSearchParameters() {
-        var prmstr = window.location.search.substr(1);
-        return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
-    }
 
-    function transformToAssocArray( prmstr ) {
-        var params = {};
-        var prmarr = prmstr.split("&");
-        for (var i = 0; i < prmarr.length; i++) {
-            var tmparr = prmarr[i].split("=");
-            params[tmparr[0]] = tmparr[1];
-        }
-        return params;
-    }
+    {% include 'attendance/get_params.js' %}
 
     var params = getSearchParameters();
     if (params.hasOwnProperty('new_user')){
         document.write(
-            "<div class='alert alert-success'>Created new user <strong>" +
-            params.new_user + "</strong></div>"
+            "<div class='row'><div class='col-sm-3'></div>\
+            <div class='col-sm-6 alert alert-success'>Created new user <strong>" +
+            params.new_user + "</strong></div></div>"
         )
     }
     </script>
 
+    <h1 class="text-center">Register for K-State MIS Club Meetings</h1>
+
     <div class="row">
 
-        <h1 class="text-center">Register for K-State MIS Club Meetings</h1>
-
-        <div class="text-center">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6 text-center">
             <form id='registerForm' method="post" action="{% url 'attendance:register' %}">
 
                 {% csrf_token %}
 
                 {% include "attendance/form.html" %}
 
-                <center><input type="submit" class="btn btn-primary"/></center>
+                <center><input type="submit" value="Register" class="btn btn-primary"/></center>
 
             </form>
         </div>
 
-        <div class="text-center" style="margin-top:50px;">
+        <div class="col-sm-5 text-center" style="margin-top:50px;">
             <p>Return to K-State MIS Club Attendance Application home.</p>
             <a href="{% url 'attendance:index' %}" class="btn btn-primary">Home</a>
         </div>

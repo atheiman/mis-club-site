@@ -49,9 +49,13 @@ def register(request):
             )
             member.save()
 
+            # If checked 'sign in to active meetings'
             if form.cleaned_data['sign_in_to_active_meetings']:
+                # lookup meetings that are available for signin
                 meetings = Meeting.objects.filter(available_for_sign_in=True)
-                print "---Sign User %s into current meetings %s---" % (new_user.username, meetings)
+                for m in meetings:
+                    # sign the new user into the meetings
+                    m.attendees.add(member.user)
 
             # redirect
             return HttpResponseRedirect(
@@ -84,16 +88,21 @@ def signin(request, meeting_id):
 
         if form.is_valid():
 
-            if form.cleaned_data['ksu_identification_code'] != "":
-                pass
+            if form.cleaned_data['ksu_identification_code'] is not None:
+                member = Member.objects.get(
+                    ksu_identification_code = form.cleaned_data['ksu_identification_code'],
+                )
+            else:
+                member = User.objects.get(
+                    username = form.cleaned_data['username'],
+                ).member
 
-            if form.cleaned_data['sign_in_to_active_meetings']:
-                meetings = Meeting.objects.filter(available_for_sign_in=True)
-                print "---Sign User %s into current meetings %s---" % (new_user.username, meetings)
+            meeting.attendees.add(member.user)
+            meeting.save()
 
             # redirect
             return HttpResponseRedirect(
-                reverse('attendance:register')+"?new_user=%s" % new_user.username
+                reverse('attendance:signin', args=(meeting.id,))+"?member=%s" % member.user.username
             )
 
     else:

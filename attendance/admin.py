@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
 
-from .models import Member, Meeting
+from .models import Member, Meeting, User
 
 
 
@@ -34,10 +33,13 @@ class MeetingAdmin(admin.ModelAdmin):
         'date_time',
         'bonus',
         'description',
+        'attendees',
+        'available_for_sign_in',
     ]
     list_display = [
         'title',
         'date_time',
+        'available_for_sign_in',
     ]
     ordering = ['-date_time']
     actions = [make_available_for_sign_in, make_unavailable_for_sign_in]

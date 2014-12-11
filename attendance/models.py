@@ -38,9 +38,9 @@ class Member(models.Model):
         # last_name
     user = models.OneToOneField(User)
     phone = models.CharField(
-        "ten digit phone number, xxx-xxx-xxxx",
         max_length=12,
         blank=True,
+        help_text="ten digit phone number, xxx-xxx-xxxx",
     )
     year_in_school = models.CharField(
         max_length=2,
