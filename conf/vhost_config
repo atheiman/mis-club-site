@@ -1,9 +1,9 @@
 # Apache VirtualHost config
 <VirtualHost *:80>
 
-    WSGIDaemonProcess $PROJ_NAME python-path=$PROJ_DIR:$VIRTUALENV/lib/python2.7/site-packages
-    WSGIProcessGroup $PROJ_NAME
-    WSGIScriptAlias / $PROJ_DIR/$WSGI_RELATIVE_PATH
+    WSGIDaemonProcess mis-club-site python-path=/opt/mis-club-site:/opt/mis-club-site/env/lib/python2.7/site-packages
+    WSGIProcessGroup mis-club-site
+    WSGIScriptAlias / /opt/mis-club-site/conf/wsgi.py
 
     ServerAdmin atheimanksu@gmail.com
 

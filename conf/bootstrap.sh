@@ -11,6 +11,8 @@ PROJ_NAME=mis-club-site
 PROJ_DIR=/opt/$PROJ_NAME
 TEMP_DIR=/tmp/$PROJ_NAME
 
+DEV_DB=$PROJ_DIR/db.sqlite3
+
 VIRTUALENV=$PROJ_DIR/env
 REQUIREMENTS_FILE=$PROJ_DIR/conf/requirements.txt
 
@@ -60,6 +62,8 @@ $VIRTUALENV/bin/pip install --requirement=$REQUIREMENTS_FILE
 
 # Apply any needed migrations
 $VIRTUALENV/bin/python $PROJ_DIR/manage.py migrate
+chgrp --recursive www-data $PROJ_DIR
+chmod --recursive 775 $PROJ_DIR
 # $VIRTUALENV/bin/python $PROJ_DIR/manage.py runserver 0.0.0.0:8000
 
 
