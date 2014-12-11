@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Member, Meeting, User
 from .forms import RegisterForm, SigninForm
@@ -70,6 +71,7 @@ def register(request):
 
 
 
+@login_required(login_url='/admin/login/')
 def signin(request, meeting_id):
     context = context_base
 
