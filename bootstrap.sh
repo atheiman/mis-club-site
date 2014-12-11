@@ -20,6 +20,7 @@ GITHUB_RELEASE_URL=https://github.com/atheiman/mis-club-site/archive/$GITHUB_REL
 WSGI_RELATIVE_PATH=conf/wsgi.py
 APACHE_VHOST=misclub
 APACHE_SITES_AVAILABLE_DIR=/etc/apache2/sites-available
+STATIC_ROOT=$PROJ_DIR/staticfiles
 
 
 
@@ -51,6 +52,8 @@ $VIRTUALENV/bin/pip install --requirement=$REQUIREMENTS_FILE
 
 # Apply any needed migrations
 $VIRTUALENV/bin/python $PROJ_DIR/manage.py migrate
+# Collect static files for all apps into settings.STATIC_ROOT
+$VIRTUALENV/bin/python $PROJ_DIR/manage.py collectstatic --noinput --clear
 
 
 
@@ -71,6 +74,15 @@ cat <<EOT >> $APACHE_SITES_AVAILABLE_DIR/$APACHE_VHOST
     WSGIDaemonProcess $PROJ_NAME python-path=$PROJ_DIR:$VIRTUALENV/lib/python2.7/site-packages
     WSGIProcessGroup $PROJ_NAME
     WSGIScriptAlias / $PROJ_DIR/$WSGI_RELATIVE_PATH
+
+
+    Alias /favicon.ico $STATIC_ROOT/global/ksu.ico
+    Alias /static/ $STATIC_ROOT/
+
+    <Directory $STATIC_ROOT>
+        Require all granted
+    </Directory>
+
 
     ServerAdmin atheimanksu@gmail.com
 
