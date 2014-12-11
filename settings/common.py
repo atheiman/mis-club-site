@@ -69,7 +69,7 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = 'http://127.0.0.1:8000/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),

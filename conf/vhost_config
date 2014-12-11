@@ -1,0 +1,16 @@
+# Apache VirtualHost config
+<VirtualHost *:80>
+
+    WSGIDaemonProcess $PROJ_NAME python-path=$PROJ_DIR:$VIRTUALENV/lib/python2.7/site-packages
+    WSGIProcessGroup $PROJ_NAME
+    WSGIScriptAlias / $PROJ_DIR/$WSGI_RELATIVE_PATH
+
+    ServerAdmin atheimanksu@gmail.com
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
