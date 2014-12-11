@@ -14,8 +14,8 @@ TEMP_DIR=/tmp/$PROJ_NAME
 VIRTUALENV=$PROJ_DIR/env
 REQUIREMENTS_FILE=$PROJ_DIR/conf/requirements.txt
 
-GIT_CLONE_URL=git@github.com:atheiman/mis-club-site.git
-GIT_BRANCH=tag/1.0.1
+GITHUB_RELEASE_TAG=1.0.1
+GITHUB_RELEASE_URL=https://github.com/atheiman/mis-club-site/archive/$GITHUB_RELEASE_TAG.tar.gz
 
 WSGI_RELATIVE_PATH=conf/wsgi.py
 APACHE_VHOST=misclub
@@ -25,57 +25,64 @@ APACHE_SITES_AVAILABLE_DIR=/etc/apache2/sites-available
 
 # clean up from previous provisions
 rm -rf $PROJ_DIR $TEMP_DIR /etc/apache2/sites-enabled/*
-mkdir $PROJ_DIR $TEMP_DIR
+mkdir $TEMP_DIR
 
 
 
 # Install OS packages
 apt-get update
-apt-get install --yes python-pip apache2 libapache2-mod-wsgi git
+apt-get install --yes python-pip apache2 libapache2-mod-wsgi
 
 
 
-# # Get the source
-git clone --branch=$GIT_BRANCH $GIT_CLONE_URL $PROJ_DIR
+# Get the source
+wget --directory-prefix=$TEMP_DIR/ $GITHUB_RELEASE_URL
+tar -xzf $TEMP_DIR/$GITHUB_RELEASE_TAG.tar.gz -C $TEMP_DIR
+mv $TEMP_DIR/$PROJ_NAME-$GITHUB_RELEASE_TAG $PROJ_DIR
 
 
 
-# # Setup a virtualenv
+# Setup a virtualenv
 pip install virtualenv
 virtualenv $VIRTUALENV
 $VIRTUALENV/bin/pip install --requirement=$REQUIREMENTS_FILE
 
 
 
-$VIRTUALENV/bin/python $PROJ_DIR/manage.py runserver 0.0.0.0:8000
+# Apply any needed migrations
+$VIRTUALENV/bin/python $PROJ_DIR/manage.py migrate
 
 
 
-# # Apache HTTP Server config
-# rm -rf /etc/apache2/sites-enabled/*
+# $VIRTUALENV/bin/python $PROJ_DIR/manage.py runserver 0.0.0.0:8000
 
 
-# # Create a Django virtual host
-# echo "" > $APACHE_SITES_AVAILABLE_DIR/$APACHE_VHOST
 
-# cat <<EOT >> $APACHE_SITES_AVAILABLE_DIR/$APACHE_VHOST
-# <VirtualHost *:80>
+# Apache HTTP Server config
+rm -rf /etc/apache2/sites-enabled/*
 
-#     WSGIDaemonProcess $DJANGO_PROJECT python-path=$DJANGO_PROJECT_DIR/$DJANGO_PROJECT:$DJANGO_PROJECT_DIR/$VIRTUAL_ENV/lib/python2.7/site-packages
-#     WSGIProcessGroup $DJANGO_PROJECT
-#     WSGIScriptAlias / $DJANGO_PROJECT_DIR/$DJANGO_PROJECT/$WSGI_RELATIVE_PATH
 
-#     ServerAdmin atheimanksu@gmail.com
+# Create a Django virtual host
+echo "" > $APACHE_SITES_AVAILABLE_DIR/$APACHE_VHOST
 
-#     ErrorLog ${APACHE_LOG_DIR}/error.log
+cat <<EOT >> $APACHE_SITES_AVAILABLE_DIR/$APACHE_VHOST
+<VirtualHost *:80>
 
-#     LogLevel warn
+    WSGIDaemonProcess $PROJ_NAME python-path=$PROJ_DIR:$VIRTUALENV/lib/python2.7/site-packages
+    WSGIProcessGroup $PROJ_NAME
+    WSGIScriptAlias / $PROJ_DIR/$WSGI_RELATIVE_PATH
 
-#     CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ServerAdmin atheimanksu@gmail.com
 
-# </VirtualHost>
-# EOT
+    ErrorLog ${APACHE_LOG_DIR}/error.log
 
-# # Enable your Django virtual host
-# a2ensite $APACHE_VHOST
-# service apache2 restart
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+EOT
+
+# Enable your Django virtual host
+a2ensite $APACHE_VHOST
+service apache2 restart
