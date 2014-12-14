@@ -42,7 +42,7 @@ chmod --recursive a+rx $PROJ_DIR
 # Setup a virtualenv
 rm --recursive --force --verbose $VIRTUAL_ENV
 virtualenv $VIRTUAL_ENV
-source $VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE
+$VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE
 
 
 
