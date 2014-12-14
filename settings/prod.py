@@ -9,7 +9,9 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-# list of hostnames that your application will respond to
-#ALLOWED_HOSTS = ['*.yourdomain.com', 'app.anotherdomain.org']
+ALLOWED_HOSTS = ['austinheiman.com',]
 
 DATABASES = PROD_DB
+
+STATIC_URL = 'http://austinheiman.com:8000/' + PROJ_NAME + '/'
+STATIC_ROOT = '/var/www/django-static/' + PROJ_NAME
