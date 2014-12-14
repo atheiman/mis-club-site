@@ -12,17 +12,6 @@
 
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-QA_DB = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'personal_site_db',
-        'USER': 'personal_site_user',
-        'PASSWORD': 'p3r50nal_5ite_pa55w0rd',
-        'HOST': 'host.yourdomain.com',
-        'PORT': '5432',
-    }
-}
-
 PROD_DB = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
