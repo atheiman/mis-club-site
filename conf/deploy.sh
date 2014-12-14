@@ -35,6 +35,7 @@ service lighttpd stop
 cd $PROJ_DIR
 git checkout $GIT_PRODUCTION_BRANCH
 git pull origin $GIT_PRODUCTION_BRANCH
+chmod --recursive a+rx $PROJ_DIR
 
 
 
@@ -58,6 +59,7 @@ mkdir --verbose $STATIC_ROOT
 $VIRTUALENV/bin/python $PROJ_DIR/manage.py collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear
 rm --force --verbose $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 cp --verbose $LIGHTTPD_CONF $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
+chmod --verbose a+rx $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 service lighttpd start
 
 
