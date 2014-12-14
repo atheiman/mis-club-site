@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Shell script to be executed on a server to update production and run the django app
+# Shell script to be executed on an Ubuntu server to update production and run the django site.
 
 PROJ_NAME=mis-club-site
 PROJ_DIR=/opt/$PROJ_NAME
@@ -28,6 +28,12 @@ STATIC_ROOT=/var/www/django-static/$PROJ_NAME
 # Stop running services
 service apache2 stop
 service lighttpd stop
+
+
+
+# Install OS Level Packages
+apt-get update
+apt-get install --yes mysql-server mysql-client python-pip apache2 libapache2-mod-wsgi lighttpd
 
 
 
