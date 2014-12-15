@@ -25,27 +25,37 @@ STATIC_ROOT=/var/www/django-static/$PROJ_NAME
 
 
 
+pretty_print() {echo -e "\n\n--$MESSAGE--\n"}
+
+
+
 # Stop running services
+MESSAGE="STOPPING APACHE AND LIGHTTPD HTTP SERVERS"; pretty_print
 service apache2 stop
+pkill apache2
 service lighttpd stop
+pkill lighttpd
 
 
 
 # Install OS Level Packages
+MESSAGE="INSTALLING OS LEVEL PACKAGES"; pretty_print
 apt-get update
 apt-get install --yes mysql-server mysql-client python-pip apache2 libapache2-mod-wsgi lighttpd
 
 
 
 # Update the source
+MESSAGE="UPDATING $PROJ_NAME SOURCE"; pretty_print
 cd $PROJ_DIR
 git checkout $GIT_PRODUCTION_BRANCH
 git pull origin $GIT_PRODUCTION_BRANCH
-chmod --recursive a+rx $PROJ_DIR
+chmod --recursive --verbose a+rx $PROJ_DIR
 
 
 
 # Setup a virtualenv
+MESSAGE="SETTING UP VIRTUALENV"; pretty_print
 rm --recursive --force --verbose $VIRTUAL_ENV
 virtualenv $VIRTUAL_ENV
 $VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE
@@ -53,6 +63,7 @@ $VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE
 
 
 # Create a copy of the data just to be safe
+MESSAGE="UPDATING DB"; pretty_print
 $VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH > $DATADUMP
 # Migrate the database
 $VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH
@@ -60,6 +71,7 @@ $VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_
 
 
 # Serve static files with Lighttpd
+MESSAGE="CONFIGURING LIGHTTPD"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
 mkdir --verbose $STATIC_ROOT
 $VIRTUALENV/bin/python $PROJ_DIR/manage.py collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear
@@ -71,6 +83,7 @@ service lighttpd start
 
 
 # Run Django site using Apache mod_wsgi
+MESSAGE="CONFIGURING APACHE"; pretty_print
 rm --force --verbose $APACHE_SITES_AVAIL_DIR/$VHOST_NAME
 cp --verbose $APACHE_VHOST_CONF $APACHE_SITES_AVAIL_DIR/$VHOST_NAME
 a2ensite $VHOST_NAME
