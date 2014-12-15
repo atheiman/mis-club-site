@@ -23,7 +23,7 @@ DATADUMP=/tmp/$PROJ_NAME_datadump.json
 NGINX_CONF=$PROJ_DIR/conf/nginx_config
 NGINX_CONF_DIR=/etc/nginx
 
-STATIC_ROOT=$PROJ_DIR/static_root
+STATIC_ROOT=$PROJ_DIR/staticfiles
 
 
 
