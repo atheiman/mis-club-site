@@ -13,4 +13,4 @@ ALLOWED_HOSTS = ['austinheiman.com', '*.austinheiman.com']
 
 DATABASES = PROD_DB
 
-STATIC_URL = 'http://austinheiman.com:/static/'
+STATIC_URL = 'http://austinheiman.com:/staticfiles/'
