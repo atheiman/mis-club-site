@@ -2,3 +2,4 @@ Django
 MySQL-python
 django-localflavor
 wsgiref
+gunicorn

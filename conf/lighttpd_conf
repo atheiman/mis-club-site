@@ -1,3 +1,0 @@
-url.rewrite-once = (
-    "^/favicon\.ico$" => "/static/global/ksu.ico",
-)
