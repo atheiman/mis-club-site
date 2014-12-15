@@ -9,9 +9,8 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ['austinheiman.com',]
+ALLOWED_HOSTS = ['austinheiman.com', '*.austinheiman.com']
 
 DATABASES = PROD_DB
 
-STATIC_URL = 'http://austinheiman.com:8000/' + PROJ_NAME + '/'
-STATIC_ROOT = '/var/www/django-static/' + PROJ_NAME
+STATIC_URL = 'http://austinheiman.com:/static/'

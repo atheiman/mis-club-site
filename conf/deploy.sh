@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Shell script to be executed on an Ubuntu server to update production and run the django site.
+# Shell script to be executed on an Ubuntu server to update production
+# and run the django site. You must already have your mysql database configured.
 
 PROJ_NAME=mis-club-site
 PROJ_DIR=/opt/$PROJ_NAME
@@ -8,6 +9,9 @@ PROJ_DIR=/opt/$PROJ_NAME
 GIT_PRODUCTION_BRANCH=production
 
 VIRTUALENV=/opt/virtualenvs/$PROJ_NAME
+PYTHON=$VIRTUALENV/bin/python
+PIP=$VIRTUALENV/bin/pip
+
 DJANGO_MANGT_FILE=$PROJ_DIR/manage.py
 DJANGO_MANGT_VERBOSITY=2
 REQUIREMENTS_FILE=$PROJ_DIR/conf/requirements.txt
@@ -16,13 +20,10 @@ PROD_SETTINGS_FILE=$PROJ_DIR/settings/prod.py
 
 DATADUMP=/tmp/$PROJ_NAME_datadump.json
 
-VHOST_NAME=$PROJ_NAME.conf
-APACHE_VHOST_CONF=$PROJ_DIR/conf/$VHOST_NAME
-APACHE_SITES_AVAIL_DIR=/etc/apache2/sites-available
+NGINX_CONF=$PROJ_DIR/conf/nginx_config
+NGINX_CONF_DIR=/etc/nginx
 
-LIGHTTPD_CONF=$PROJ_DIR/conf/lighttpd_conf
-LIGHTTPD_CONF_INCLUDES=/etc/lighttpd/includes
-STATIC_ROOT=/var/www/django-static/$PROJ_NAME
+STATIC_ROOT=$PROJ_DIR/static_root
 
 
 
@@ -34,17 +35,15 @@ pretty_print() {
 
 # Stop running services
 MESSAGE="STOPPING APACHE AND LIGHTTPD HTTP SERVERS"; pretty_print
-service apache2 stop
-pkill apache2
-service lighttpd stop
-pkill lighttpd
+nginx -s quit
+pkill nginx
 
 
 
 # Install OS Level Packages
 MESSAGE="INSTALLING OS LEVEL PACKAGES"; pretty_print
 apt-get update
-apt-get install --yes mysql-server mysql-client libmysqlclient-dev python-dev python-pip apache2 libapache2-mod-wsgi lighttpd
+apt-get install --yes mysql-client libmysqlclient-dev python-dev python-pip apache2 libapache2-mod-wsgi lighttpd
 
 
 
@@ -61,35 +60,30 @@ chmod --recursive --verbose a+rx $PROJ_DIR
 MESSAGE="SETTING UP VIRTUALENV"; pretty_print
 rm --recursive --force --verbose $VIRTUALENV
 virtualenv $VIRTUALENV
-$VIRTUALENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade --verbose
+$PIP install --requirement=$REQUIREMENTS_FILE --upgrade --verbose
 
 
 
 # Create a copy of the data just to be safe
-MESSAGE="UPDATING DB"; pretty_print
-$VIRTUALENV/bin/python $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY > $DATADUMP
+MESSAGE="MIGRATING DATABASE"; pretty_print
+$PYTHON $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY > $DATADUMP
 # Migrate the database
-$VIRTUALENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY
+$PYTHON $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY
 
 
 
-# Serve static files with Lighttpd
-MESSAGE="CONFIGURING LIGHTTPD"; pretty_print
+# Prepare static files
+MESSAGE="PREPARING STATIC FILES"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
 mkdir --verbose $STATIC_ROOT
 # collect all apps static files to one dir for lighttpd serving
-$VIRTUALENV/bin/python $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
-# Add any additional lighttpd conf to the project's lighttpd conf include
-rm --force --verbose $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
-cp --verbose $LIGHTTPD_CONF $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
-chmod --verbose a+rx $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
-service lighttpd start
+$PYTHON $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
 
 
 
-# Run Django site using Apache mod_wsgi
-MESSAGE="CONFIGURING APACHE"; pretty_print
-rm --force --verbose $APACHE_SITES_AVAIL_DIR/$VHOST_NAME
-cp --verbose $APACHE_VHOST_CONF $APACHE_SITES_AVAIL_DIR/$VHOST_NAME
-a2ensite $VHOST_NAME
-service apache2 start
+# Configure nginx to serve django site
+MESSAGE="CONFIGURING NGINX"; pretty_print
+rm --force --verbose $NGINX_CONF_DIR/sites-*/$PROJ_NAME
+cp --verbose $NGINX_CONF $NGINX_CONF_DIR/sites-available/
+ln --symbolic --verbose $NGINX_CONF_DIR/sites-available/$PROJ_NAME $NGINX_CONF_DIR/sites-enabled/
+nginx
