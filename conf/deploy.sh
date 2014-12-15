@@ -9,6 +9,7 @@ GIT_PRODUCTION_BRANCH=production
 
 VIRTUAL_ENV=/opt/virtualenvs/$PROJ_NAME
 DJANGO_MANGT_FILE=$PROJ_DIR/manage.py
+DJANGO_MANGT_VERBOSITY=2
 REQUIREMENTS_FILE=$PROJ_DIR/conf/requirements.txt
 PROD_SETTINGS_PY_PATH=settings.prod
 PROD_SETTINGS_FILE=$PROJ_DIR/settings/prod.py
@@ -66,9 +67,9 @@ $VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade
 
 # Create a copy of the data just to be safe
 MESSAGE="UPDATING DB"; pretty_print
-$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH > $DATADUMP
+$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY > $DATADUMP
 # Migrate the database
-$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH
+$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY
 
 
 
@@ -76,7 +77,7 @@ $VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_
 MESSAGE="CONFIGURING LIGHTTPD"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
 mkdir --verbose $STATIC_ROOT
-$VIRTUALENV/bin/python $PROJ_DIR/manage.py collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear
+$VIRTUALENV/bin/python $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
 rm --force --verbose $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 cp --verbose $LIGHTTPD_CONF $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 chmod --verbose a+rx $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
