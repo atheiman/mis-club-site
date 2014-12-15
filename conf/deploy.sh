@@ -43,7 +43,7 @@ pkill lighttpd
 # Install OS Level Packages
 MESSAGE="INSTALLING OS LEVEL PACKAGES"; pretty_print
 apt-get update
-apt-get install --yes mysql-server mysql-client python-pip apache2 libapache2-mod-wsgi lighttpd
+apt-get install --yes mysql-server mysql-client libmysqlclient-dev python-pip apache2 libapache2-mod-wsgi lighttpd
 
 
 
@@ -60,7 +60,7 @@ chmod --recursive --verbose a+rx $PROJ_DIR
 MESSAGE="SETTING UP VIRTUALENV"; pretty_print
 rm --recursive --force --verbose $VIRTUAL_ENV
 virtualenv $VIRTUAL_ENV
-$VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE
+$VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade
 
 
 
