@@ -43,7 +43,7 @@ pkill lighttpd
 # Install OS Level Packages
 MESSAGE="INSTALLING OS LEVEL PACKAGES"; pretty_print
 apt-get update
-apt-get install --yes mysql-server mysql-client libmysqlclient-dev python-pip apache2 libapache2-mod-wsgi lighttpd
+apt-get install --yes mysql-server mysql-client libmysqlclient-dev python-dev python-pip apache2 libapache2-mod-wsgi lighttpd
 
 
 
