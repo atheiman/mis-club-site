@@ -25,7 +25,9 @@ STATIC_ROOT=/var/www/django-static/$PROJ_NAME
 
 
 
-pretty_print() {echo -e "\n\n--$MESSAGE--\n"}
+pretty_print() {
+    echo -e "\n\n--$MESSAGE--\n"
+}
 
 
 
