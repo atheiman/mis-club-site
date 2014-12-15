@@ -7,7 +7,7 @@ PROJ_DIR=/opt/$PROJ_NAME
 
 GIT_PRODUCTION_BRANCH=production
 
-VIRTUAL_ENV=/opt/VIRTUAL_ENVs/$PROJ_NAME
+VIRTUALENV=/opt/virtualenvs/$PROJ_NAME
 DJANGO_MANGT_FILE=$PROJ_DIR/manage.py
 DJANGO_MANGT_VERBOSITY=2
 REQUIREMENTS_FILE=$PROJ_DIR/conf/requirements.txt
@@ -57,19 +57,19 @@ chmod --recursive --verbose a+rx $PROJ_DIR
 
 
 
-# Setup a VIRTUAL_ENV
-MESSAGE="SETTING UP VIRTUAL_ENV"; pretty_print
-rm --recursive --force --verbose $VIRTUAL_ENV
-VIRTUAL_ENV $VIRTUAL_ENV
-$VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade --verbose
+# Setup a virtualenv
+MESSAGE="SETTING UP VIRTUALENV"; pretty_print
+rm --recursive --force --verbose $VIRTUALENV
+virtualenv $VIRTUALENV
+$VIRTUALENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade --verbose
 
 
 
 # Create a copy of the data just to be safe
 MESSAGE="UPDATING DB"; pretty_print
-$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY > $DATADUMP
+$VIRTUALENV/bin/python $DJANGO_MANGT_FILE dumpdata --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY > $DATADUMP
 # Migrate the database
-$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY
+$VIRTUALENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity=$DJANGO_MANGT_VERBOSITY
 
 
 
@@ -78,7 +78,7 @@ MESSAGE="CONFIGURING LIGHTTPD"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
 mkdir --verbose $STATIC_ROOT
 # collect all apps static files to one dir for lighttpd serving
-$VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
+$VIRTUALENV/bin/python $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
 # Add any additional lighttpd conf to the project's lighttpd conf include
 rm --force --verbose $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 cp --verbose $LIGHTTPD_CONF $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
