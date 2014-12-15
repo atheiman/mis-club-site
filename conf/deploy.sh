@@ -96,3 +96,4 @@ MESSAGE="CONFIGURING NGINX"; pretty_print
 # nginx
 rm --force --verbose $NGINX_CONF_DIR/nginx.conf
 cp --verbose $NGINX_CONF $NGINX_CONF_DIR/nginx.conf
+nginx
