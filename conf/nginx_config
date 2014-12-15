@@ -24,7 +24,7 @@ http {
     server {
         listen 80 default;
         client_max_body_size 4G;
-        server_name _;
+        server_name austinheiman.com;
 
         keepalive_timeout 5;
 

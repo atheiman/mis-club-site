@@ -81,7 +81,13 @@ $PYTHON $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noi
 
 
 
-# Configure nginx to serve django site
+# Run gunicorn to serve django site
+MESSAGE="CONFIGURING NGINX"; pretty_print
+gunicorn --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn_access_log --error-logfile /tmp/gunicorn_error_log conf.wsgi
+
+
+
+# Configure nginx to proxy django site and serve static files
 MESSAGE="CONFIGURING NGINX"; pretty_print
 rm --force --verbose $NGINX_CONF_DIR/sites-*/$PROJ_NAME
 cp --verbose $NGINX_CONF $NGINX_CONF_DIR/sites-available/
