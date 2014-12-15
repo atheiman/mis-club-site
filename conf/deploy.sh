@@ -60,8 +60,7 @@ chmod --recursive --verbose a+rx $PROJ_DIR
 # Setup a virtualenv
 MESSAGE="SETTING UP VIRTUALENV"; pretty_print
 rm --recursive --force --verbose $VIRTUAL_ENV
-virtualenv $VIRTUAL_ENV
-$VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade
+$VIRTUAL_ENV/bin/pip install --requirement=$REQUIREMENTS_FILE --upgrade --verbose
 
 
 
@@ -77,7 +76,9 @@ $VIRTUAL_ENV/bin/python $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_
 MESSAGE="CONFIGURING LIGHTTPD"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
 mkdir --verbose $STATIC_ROOT
+# collect all apps static files to one dir for lighttpd serving
 $VIRTUALENV/bin/python $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
+# Add any additional lighttpd conf to the project's lighttpd conf include
 rm --force --verbose $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 cp --verbose $LIGHTTPD_CONF $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
 chmod --verbose a+rx $LIGHTTPD_CONF_INCLUDES/$PROJ_NAME
