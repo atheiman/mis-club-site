@@ -20,7 +20,7 @@ PROD_SETTINGS_FILE=$PROJ_DIR/settings/prod.py
 
 DATADUMP=/tmp/$PROJ_NAME_datadump.json
 
-NGINX_SITE_CONF=$PROJ_DIR/conf/nginx_config
+NGINX_SITE_CONF=$PROJ_DIR/conf/nginx_site_config
 NGINX_CONF_DIR=/etc/nginx
 
 STATIC_ROOT=$PROJ_DIR/static_root
