@@ -20,10 +20,10 @@ PROD_SETTINGS_FILE=$PROJ_DIR/settings/prod.py
 
 DATADUMP=/tmp/$PROJ_NAME_datadump.json
 
-NGINX_CONF=$PROJ_DIR/conf/nginx_config
+NGINX_SITE_CONF=$PROJ_DIR/conf/nginx_config
 NGINX_CONF_DIR=/etc/nginx
 
-STATIC_ROOT=$PROJ_DIR/staticfiles
+STATIC_ROOT=$PROJ_DIR/static_root
 
 
 
@@ -76,7 +76,7 @@ $PYTHON $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity
 # Prepare static files
 MESSAGE="PREPARING STATIC FILES"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
-mkdir --verbose $STATIC_ROOT
+mkdir --verbose --parents $STATIC_ROOT/static
 # collect all apps static files to one dir for lighttpd serving
 $PYTHON $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
 
@@ -85,16 +85,15 @@ $PYTHON $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noi
 # Run gunicorn to serve django site
 MESSAGE="LAUNCHING GUNICORN"; pretty_print
 rm --force --verbose /tmp/gunicorn*
+# TODO: nohup gunicorn
+# nohup gunicorn > /dev/null 2>&1 &
 gunicorn --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn_access_log --error-logfile /tmp/gunicorn_error_log --bind unix:/tmp/gunicorn.sock conf.wsgi &
 
 
 
 # Configure nginx to proxy django site and serve static files
 MESSAGE="CONFIGURING AND LAUNCHING NGINX"; pretty_print
-# rm --force --verbose $NGINX_CONF_DIR/sites-*/$PROJ_NAME
-# cp --verbose $NGINX_CONF $NGINX_CONF_DIR/sites-available/
-# ln --symbolic --verbose $NGINX_CONF_DIR/sites-available/$PROJ_NAME $NGINX_CONF_DIR/sites-enabled/
-# nginx
-rm --force --verbose $NGINX_CONF_DIR/nginx.conf
-cp --verbose $NGINX_CONF $NGINX_CONF_DIR/nginx.conf
+rm --force --verbose $NGINX_CONF_DIR/sites-*/$PROJ_NAME
+cp --verbose $NGINX_SITE_CONF $NGINX_CONF_DIR/sites-available/$PROJ_NAME
+ln --symbolic --verbose $NGINX_CONF_DIR/sites-available/$PROJ_NAME $NGINX_CONF_DIR/sites-enabled/$PROJ_NAME
 nginx

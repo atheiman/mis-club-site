@@ -70,7 +70,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# collectstatic will dump a dir full of static files for each app here
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root/static")
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
