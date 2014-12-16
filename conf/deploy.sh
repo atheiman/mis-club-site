@@ -11,6 +11,7 @@ GIT_PRODUCTION_BRANCH=production
 VIRTUALENV=/opt/virtualenvs/$PROJ_NAME
 PYTHON=$VIRTUALENV/bin/python
 PIP=$VIRTUALENV/bin/pip
+GUNICORN=$VIRTUALENV/bin/gunicorn
 
 DJANGO_MANGT_FILE=$PROJ_DIR/manage.py
 DJANGO_MANGT_VERBOSITY=2
@@ -88,7 +89,7 @@ MESSAGE="LAUNCHING GUNICORN"; pretty_print
 rm --force --verbose /tmp/gunicorn*
 # TODO: nohup gunicorn
 # nohup gunicorn > /dev/null 2>&1 &
-gunicorn --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn_access_log --error-logfile /tmp/gunicorn_error_log --bind unix:/tmp/gunicorn.sock conf.wsgi &
+$GUNICORN --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn_access_log --error-logfile /tmp/gunicorn_error_log --bind unix:/tmp/gunicorn.sock conf.wsgi &
 
 
 
