@@ -51,6 +51,7 @@ apt-get install --yes mysql-client libmysqlclient-dev python-dev python-pip apac
 # Update the source
 MESSAGE="UPDATING $PROJ_NAME SOURCE"; pretty_print
 cd $PROJ_DIR
+git checkout -- $PROJ_DIR
 git checkout $GIT_PRODUCTION_BRANCH
 git pull origin $GIT_PRODUCTION_BRANCH
 chmod --recursive --verbose a+rx $PROJ_DIR
