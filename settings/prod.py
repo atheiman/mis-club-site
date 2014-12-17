@@ -9,7 +9,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ['austinheiman.com', '*.austinheiman.com']
+ALLOWED_HOSTS = ['.austinheiman.com']
 
 DATABASES = PROD_DB
 
