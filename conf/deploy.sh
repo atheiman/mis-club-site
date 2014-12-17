@@ -6,7 +6,7 @@
 
 
 # Exit immediately if a command exits with a non-zero status.
-set -e
+#set -e
 
 
 
@@ -90,7 +90,7 @@ $PYTHON $DJANGO_MANGT_FILE migrate --settings=$PROD_SETTINGS_PY_PATH --verbosity
 MESSAGE="PREPARING STATIC FILES"; pretty_print
 rm --recursive --force --verbose $STATIC_ROOT
 mkdir --verbose --parents $STATIC_ROOT/static
-# collect all apps static files to one dir for lighttpd serving
+# collect all apps static files to one dir for serving
 $PYTHON $DJANGO_MANGT_FILE collectstatic --settings=$PROD_SETTINGS_PY_PATH --noinput --clear --verbosity=$DJANGO_MANGT_VERBOSITY
 
 
