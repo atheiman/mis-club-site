@@ -3,6 +3,13 @@
 # Shell script to be executed on an Ubuntu server to update production
 # and run the django site. You must already have your mysql database configured.
 
+
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+
+
 PROJ_NAME=mis-club-site
 PROJ_DIR=/opt/$PROJ_NAME
 
@@ -63,6 +70,7 @@ chmod --recursive --verbose a+rx $PROJ_DIR
 
 # Setup a virtualenv
 MESSAGE="SETTING UP VIRTUALENV"; pretty_print
+# If a virtualenv does not exist, then create it
 if [ ! -d "$VIRTUALENV" ]; then
     virtualenv $VIRTUALENV
 fi
