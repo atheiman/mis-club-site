@@ -63,8 +63,9 @@ chmod --recursive --verbose a+rx $PROJ_DIR
 
 # Setup a virtualenv
 MESSAGE="SETTING UP VIRTUALENV"; pretty_print
-rm --recursive --force --verbose $VIRTUALENV
-virtualenv $VIRTUALENV
+if [ ! -d "$VIRTUALENV" ]; then
+    virtualenv $VIRTUALENV
+fi
 $PIP install --requirement=$REQUIREMENTS_FILE --upgrade --verbose
 
 
