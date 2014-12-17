@@ -16,7 +16,6 @@ DATABASES = PROD_DB
 STATIC_URL = 'http://mis-club.austinheiman.com:/static/'
 
 # Gunicorn settings
-# $GUNICORN --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn.access.log --error-logfile /tmp/gunicorn.error.log --bind unix:/tmp/gunicorn.sock conf.wsgi &
 pid = "/tmp/gunicorn.pid"
 accesslog = "/tmp/gunicorn.access.log"
 errorlog = "/tmp/gunicorn.error.log"

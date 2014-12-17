@@ -36,8 +36,7 @@ pretty_print() {
 
 # Stop running services
 MESSAGE="STOPPING NGINX AND GUNICORN"; pretty_print
-$GUNICORN
-pgrep --full $PROJ_NAME
+pkill --full $PROJ_NAME
 nginx -s quit
 pkill nginx
 
