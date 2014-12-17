@@ -36,7 +36,8 @@ pretty_print() {
 
 # Stop running services
 MESSAGE="STOPPING NGINX AND GUNICORN"; pretty_print
-pkill gunicorn
+$GUNICORN
+pgrep --full $PROJ_NAME
 nginx -s quit
 pkill nginx
 
@@ -89,7 +90,7 @@ MESSAGE="LAUNCHING GUNICORN"; pretty_print
 rm --force --verbose /tmp/gunicorn*
 # TODO: nohup gunicorn
 # nohup gunicorn > /dev/null 2>&1 &
-$GUNICORN --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn.access.log --error-logfile /tmp/gunicorn.error.log --bind unix:/tmp/gunicorn.sock conf.wsgi &
+$GUNICORN conf.wsgi &
 
 
 
