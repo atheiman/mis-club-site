@@ -21,6 +21,8 @@ PROD_SETTINGS_FILE=$PROJ_DIR/settings/prod.py
 
 DATADUMP=/tmp/$PROJ_NAMEdatadump.json
 
+GUNICORN_CONFIG=$PROJ_DIR/conf/config.wsgi
+
 NGINX_SITE_CONF=$PROJ_DIR/conf/nginx_site_config
 NGINX_CONF_DIR=/etc/nginx
 
@@ -89,7 +91,9 @@ MESSAGE="LAUNCHING GUNICORN"; pretty_print
 rm --force --verbose /tmp/gunicorn*
 # TODO: nohup gunicorn
 # nohup gunicorn > /dev/null 2>&1 &
-$GUNICORN conf.wsgi &
+$GUNICORN --config=$GUNICORN_CONFIG conf.wsgi &
+# $GUNICORN --pid /tmp/gunicorn_pid --access-logfile /tmp/gunicorn.access.log --error-logfile /tmp/gunicorn.error.log --bind unix:/tmp/gunicorn.sock conf.wsgi &
+
 
 
 

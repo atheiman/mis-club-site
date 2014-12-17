@@ -12,9 +12,3 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.prod")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
-
-# Gunicorn settings
-pid = "/tmp/gunicorn.pid"
-accesslog = "/tmp/gunicorn.access.log"
-errorlog = "/tmp/gunicorn.error.log"
-bind = "unix:/tmp/gunicorn.sock"
