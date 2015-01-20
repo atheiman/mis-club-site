@@ -2,12 +2,13 @@
 
 {% block content %}
 
+    {% load static %}
+    <script src="{% static 'global/get_params.js' %}"></script>
+
     <script>
     // If new_user in GET param 'member', display a success message.
-    {% include 'attendance/get_params.js' %}
-
     var params = getSearchParameters();
-    if (params.hasOwnProperty('member')){
+    if (params.hasOwnProperty('member')) {
         document.write(
             "<div class='row'><div class='col-sm-3'></div>\
             <div class='col-sm-6 alert alert-success'><strong>" +
@@ -19,11 +20,11 @@
     <h2 class="text-center">Signin to Meeting:</h2>
     <h1 class="text-center">{{ meeting.title }} - {{ meeting.date_time|date }}</h1>
 
-    <div class="row">
+    <div class="row" style="margin-top:40px;">
 
         <div class="text-center col-sm-6">
 
-            <p>Either swipe your K-State ID card, or input your registered eID and password.</p>
+            <p>Either swipe your K-State ID card, or input your eID and attendance password.</p>
 
             <form id='signinForm' method="post" action="{% url 'attendance:signin' meeting.id %}">
 
@@ -41,5 +42,20 @@
             <a href="{% url 'attendance:register' %}" class="btn btn-primary">Register</a>
         </div>
     </div>
+
+<div class="panel panel-primary text-center" style="margin-top:40px;">
+    <div class="panel-heading">
+        <h3 class="panel-title">Meeting Attendees</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            {% for a in meeting.attendees.all %}
+                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                    {{ a.first_name }} {{ a.last_name }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 {% endblock content %}
