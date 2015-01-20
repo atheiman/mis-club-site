@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, get_list_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -77,10 +77,9 @@ def signin(request, meeting_id):
 
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     if meeting.available_for_sign_in == False:
-        return HttpResponse(
+        return HttpResponseNotFound(
             "<strong>Error: Meeting (id = %d) not available for sign in.\
-            Edit in <a href='/admin'>admin interface</a>.</strong>" % meeting.id,
-            status_code=400,
+            Perhaps you need to make some <a href='/admin'>administrative changes</a>.</strong>" % meeting.id,
         )
 
     if request.method == 'POST':

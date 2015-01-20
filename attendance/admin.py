@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.core.urlresolvers import reverse
 
 from .models import Member, Meeting, User
 
@@ -19,6 +20,18 @@ class UserAdmin(UserAdmin):
 
 
 
+def meeting_link(obj):
+    """
+    Return a signin link to the meeting.
+    """
+    if not obj.available_for_sign_in:
+        return "Not available for signin."
+    url = reverse('attendance:signin', kwargs={'meeting_id':obj.id})
+    return "<a href='{url}'>{text}</a>".format(text="Signin to this meeting",
+                                                 url=url)
+meeting_link.allow_tags = True
+meeting_link.short_description = "Signin Link"
+
 def make_available_for_sign_in(modeladmin, request, queryset):
     queryset.update(available_for_sign_in=True)
 make_available_for_sign_in.short_description = "Mark selected meetings as available for sign in"
@@ -28,7 +41,11 @@ def make_unavailable_for_sign_in(modeladmin, request, queryset):
 make_unavailable_for_sign_in.short_description = "Mark selected meetings as unavailable for sign in"
 
 class MeetingAdmin(admin.ModelAdmin):
-    fields = [
+    readonly_fields = [
+        meeting_link,
+        'id',
+    ]
+    fields = readonly_fields + [
         'title',
         'date_time',
         'bonus',
@@ -37,6 +54,8 @@ class MeetingAdmin(admin.ModelAdmin):
         'available_for_sign_in',
     ]
     list_display = [
+        'id',
+        meeting_link,
         'title',
         'date_time',
         'available_for_sign_in',
