@@ -2,11 +2,11 @@
 
 {% block content %}
 
+    {% load static %}
+    <script src="{% static 'global/get_params.js' %}"></script>
+
     <script>
     // If new_user in GET param 'new_user', display a success message.
-
-    {% include 'attendance/get_params.js' %}
-
     var params = getSearchParameters();
     if (params.hasOwnProperty('new_user')){
         document.write(

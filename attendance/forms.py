@@ -17,7 +17,7 @@ class RegisterForm(forms.Form):
             'invalid': 'Lowercase alphanumeric characters, underscores, and dashes only (a-z, 0-9, _, -)'
         },
         widget = forms.TextInput(
-            attrs = {'autofocus':'autofocus', 'placeholder':'johndoe'}
+            attrs = {'autofocus':'autofocus', 'placeholder':'K-State eID'}
         ),
     )
     first_name = forms.CharField(
@@ -40,18 +40,22 @@ class RegisterForm(forms.Form):
     )
     password = forms.CharField(
         max_length = 30,
-        widget = forms.PasswordInput,
+        widget = forms.PasswordInput(
+            attrs = {'placeholder':'Password'}
+        ),
         min_length = 6,
         help_text = "Please not your K-State password. 6 or more characters.",
     )
     confirm_password = forms.CharField(
         max_length = 30,
-        widget = forms.PasswordInput,
+        widget = forms.PasswordInput(
+            attrs = {'placeholder':'Confirm Password'}
+        ),
         min_length = 6,
     )
     phone = USPhoneNumberField(
         required = False,
-        help_text='xxx-xxx-xxxx',
+        help_text='10 digits, separated by hyphens: xxx-xxx-xxxx',
         widget = forms.TextInput(
             attrs = {'placeholder':'785-532-6011'}
         ),
@@ -94,10 +98,13 @@ class SigninForm(forms.Form):
         required = False,
         widget = forms.TextInput(
             attrs = {'autofocus':'autofocus'}
-        )
+        ),
     )
     username = forms.RegexField(
         label = 'K-State eID',
+        widget = forms.TextInput(
+            attrs = {'placeholder':'K-State eID'}
+        ),
         max_length = 30,
         regex = r'^[a-z0-9-_]+$',
         required = False,
@@ -105,7 +112,9 @@ class SigninForm(forms.Form):
     )
     password = forms.CharField(
         max_length = 30,
-        widget = forms.PasswordInput,
+        widget = forms.PasswordInput(
+            attrs = {'placeholder':'Attendance Password'}
+        ),
         min_length = 6,
         required = False,
     )
@@ -118,17 +127,17 @@ class SigninForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if ksu_identification_code == "" and username == "":
-            raise forms.ValidationError("Either swipe ID card, or input username and password.")
+            raise forms.ValidationError("Either swipe ID card, or input eID and attendance password.")
 
         if ksu_identification_code is not None:
             try:
                 member = Member.objects.get(ksu_identification_code=ksu_identification_code)
             except Member.DoesNotExist:
-                raise forms.ValidationError("Invalid KSU Identification Code. Swipe again, or sign in with username and password.")
+                raise forms.ValidationError("Invalid KSU Identification Code. Swipe again, or sign in with eID and attendance password.")
 
         if username != "":
             user = authenticate(username=username, password=password)
             if user is None:
-                raise forms.ValidationError("Invalid username and password.")
+                raise forms.ValidationError("Invalid eID and attendance password.")
 
         return self.cleaned_data
