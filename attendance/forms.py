@@ -120,8 +120,6 @@ class SigninForm(forms.Form):
     )
 
     def clean(self):
-        print self.cleaned_data
-
         ksu_identification_code = self.cleaned_data.get('ksu_identification_code')
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
