@@ -17,31 +17,37 @@ class RegisterForm(forms.Form):
             'invalid': 'Lowercase alphanumeric characters, underscores, and dashes only (a-z, 0-9, _, -)'
         },
         widget = forms.TextInput(
-            attrs = {'autofocus':'autofocus', 'placeholder':'K-State eID'}
+            attrs = {'autofocus':'autofocus',
+                     'placeholder':'K-State eID',
+                     'required': 'required',}
         ),
     )
     first_name = forms.CharField(
         max_length = 30,
         widget = forms.TextInput(
-            attrs = {'placeholder':'John'}
+            attrs = {'placeholder':'John',
+                     'required': 'required',}
         ),
     )
     last_name = forms.CharField(
         max_length = 30,
         widget = forms.TextInput(
-            attrs = {'placeholder':'Doe'}
+            attrs = {'placeholder':'Doe',
+                     'required': 'required',}
         ),
     )
     email = forms.EmailField(
         help_text = "Does not have to be your k-state email.",
         widget = forms.TextInput(
-            attrs = {'placeholder':'johndoe@ksu.edu'}
+            attrs = {'placeholder':'johndoe@ksu.edu',
+                     'required': 'required',}
         ),
     )
     password = forms.CharField(
         max_length = 30,
         widget = forms.PasswordInput(
-            attrs = {'placeholder':'Password'}
+            attrs = {'placeholder':'Password',
+                     'required': 'required',}
         ),
         min_length = 6,
         help_text = "Please not your K-State password. 6 or more characters.",
@@ -49,7 +55,8 @@ class RegisterForm(forms.Form):
     confirm_password = forms.CharField(
         max_length = 30,
         widget = forms.PasswordInput(
-            attrs = {'placeholder':'Confirm Password'}
+            attrs = {'placeholder':'Confirm Password',
+                     'required': 'required',}
         ),
         min_length = 6,
     )
@@ -72,6 +79,9 @@ class RegisterForm(forms.Form):
         max_value = 999999999999999999,
         min_value = 100000000000,
         help_text = "Swipe your K-State ID Card. This is <strong>not</strong> your WID number.",
+        widget = forms.NumberInput(
+            attrs = {'required':'required'}
+        ),
     )
 
     sign_in_to_active_meetings = forms.BooleanField(
