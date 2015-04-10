@@ -12,6 +12,8 @@ The MIS Club Attendance web application is a Django powered site. [Django](https
 - **Templating** - Allows developers to create [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself) web pages using template inheritance and easy to read template logic.
 - **Administration Site** - Django projects include an automatically generated administration site that allows a staff to easily manage their data via a functional web interface.
 
+> Some well-known sites that use Django include Pinterest, Instagram, Mozilla, The Washington Times, Disqus, the Public Broadcasting Service, and Bitbucket.
+
 Our site, like most Django sites, runs on a Virtual Private Server in *the cloud*. It utilizes several popular technologies:
 
 - DigitalOcean
