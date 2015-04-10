@@ -17,3 +17,7 @@ The MIS Club Attendance web application is a Django powered site. [Django](https
 Our site, like most Django sites, runs on a Virtual Private Server in *the cloud*. It utilizes several popular technologies:
 
 - DigitalOcean
+- Ubuntu
+- Bootstrap
+- HTML5
+- JavaScript
