@@ -113,3 +113,14 @@ def signin(request, meeting_id):
     context['form'] = form
 
     return render(request, 'attendance/signin.html', context)
+
+
+def report(request, report_type):
+    context = {
+        'meetings': Meeting.objects.all(),
+        'users': User.objects.all(),
+    }
+    if report_type == 'meeting':
+        return render(request, 'attendance/meeting_report.html', context)
+    elif report_type == 'member':
+        return render(request, 'attendance/member_report.html', context)
