@@ -58,7 +58,7 @@ class Member(models.Model):
         return self.year_in_school in (self.JUNIOR, self.SENIOR)
 
     def attended_count(self):
-        return self.meetings.count()
+        return self.user.meetings.count()
 
     def attendance_percentage(self):
         return "{0:.0f}%".format(float(self.attended_count()) / float(Meeting.objects.filter(bonus=False).count()) * 100)
