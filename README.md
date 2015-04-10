@@ -1,11 +1,17 @@
 # MIS Club Site
 
-To be used by the K-State MIS Club for tracking meeting attendance.
+Created by Austin Heiman for the K-State MIS Club.
 
-The attendance application is used to manage meetings and members. There are views to list the meetings (`index`), sign in to a meeting (`signin`), and register (`register`).
+## What is Django?
 
-Created by Austin Heiman.
+The MIS Club Attendance web application is a Django powered site. [Django](https://www.djangoproject.com/) is a full-featured, mature, open-source, and actively developed Python web framework with several components:
 
-## Changelog
+- **Object Relational Mapper** - Allows developers to establish a link between Python objects and records in a database.
+- **Views and URL Resolving** - Allows developers to map attractive, meaningful urls (`example.com/login` and `example.com/users/atheiman` rather than `example.com/Login.event?token=1n1u23ibsdf0&id=adf8b%89%78%23ajsn`) to data-driven views.
+- **Forms** - Allows developers to quickly create **secure** forms from models.
+- **Templating** - Allows developers to create [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself) web pages using template inheritance and easy to read template logic.
+- **Administration Site** - Django projects include an automatically generated administration site that allows a staff to easily manage their data via a functional web interface.
 
-1.0 - initial release
+Our site, like most Django sites, runs on a Virtual Private Server in *the cloud*. It utilizes several popular technologies:
+
+- DigitalOcean
