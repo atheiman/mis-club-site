@@ -1,0 +1,50 @@
+{% extends "attendance/base.html" %}
+
+{% block style %}
+<link rel="stylesheet"
+      href="//cdn.datatables.net/1.10.6/css/jquery.dataTables.min.css">
+{% endblock style %}
+
+{% block content %}
+
+    <h1 class="text-center">K-State MIS Club Attendance</h1>
+    <h2 class="text-center">Viewing by Meeting</h2>
+    <p class="text-center">
+      <a href="{% url 'attendance:report' 'member' %}">View by Member</a>
+    </p>
+
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date and Time</th>
+          <th>Description</th>
+          <th>Bonus</th>
+          <th>Attendance Count</th>
+          <th>Attendees</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in meetings %}
+          <tr>
+            <th>{{ m.title }}</th>
+            <th>{{ m.date_time }}</th>
+            <th>{{ m.description }}</th>
+            <th>{{ m.bonus }}</th>
+            <th>{{ m.attendees.all.count }}</th>
+            <th>{% for a in m.attendees.all %}{{ a }} {% endfor %}</th>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock content %}
+
+{% block script %}
+<script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('table').DataTable();
+});
+</script>
+{% endblock script %}
